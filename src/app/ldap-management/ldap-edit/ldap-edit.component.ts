@@ -48,14 +48,14 @@ export class LdapEditComponent extends LdapDetailsComponent implements OnInit {
   }
 
   private getUser(): void {
-    const login: string | null = this.route.snapshot.paramMap.get('id');
+    const id = Number(this.route.snapshot.paramMap.get('id'));
 
-    if (login === null) {
+    if (id === null) {
       console.error("Can't retrieve user id from URL");
       return;
     }
 
-    this.usersService.getUser(login).subscribe({
+    this.usersService.getUser(id).subscribe({
       next: (user: UserLdap | undefined) => {
         if (user) {
           this.user = user;
