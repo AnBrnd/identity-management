@@ -10,28 +10,20 @@ export class AlertComponent implements OnInit {
   cssClass: string[] = ['alert', 'alert-dismissible', 'fade'];
 
   constructor() {
-    this.type = 'info';
+    this.type = 'info'
   }
 
   ngOnInit(): void {
-    let alertClass: string = 'alert-info';
+    let alert = 'alert-info';
     switch (this.type) {
-      case 'success':
-        alertClass = 'alert-success';
-        break;
-      case 'danger':
-        alertClass = 'alert-danger';
-        break;
-      case 'warning':
-        alertClass = 'alert-warning';
-        break;
-      default:
-        alertClass = 'alert-info';
+      case 'succes': alert = 'alert-success'; break;
+      case 'danger': alert = 'alert-danger'; break;
+      case 'warning': alert = 'alert-warning'; break;
     }
-    this.cssClass.push(alertClass);
+    this.cssClass.push(alert);
   }
 
-  removeAlert(): void {
+  removeAlert() {
     this.cssClass = ['alert-hide'];
   }
 }

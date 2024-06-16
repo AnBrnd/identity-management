@@ -1,56 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UserLdap } from '../../models/user-ldap.model';
-import { UsersService } from '../../service/users.service';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { ConfirmValidParentMatcher, passwordMatchingValidator } from './passwords-validator.directive';
+import {Router} from "@angular/router";
+import  {Location} from "@angular/common";
+import {UserLdap} from "../../models/user-ldap";
+import {FormBuilder, Validators} from "@angular/forms";
+import {ConfirmValidParentMatcher, passwordMatchingValidator} from "./passwords-validator.directive";
 
 export abstract class LdapDetailsComponent {
-  user: UserLdap | undefined;
-  processLoadRunning = false;
-  processValidateRunning = false;
-  userForm: FormGroup;
-  passwordPlaceHolder: string;
-  errorMessage = '';
-  confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
+  passwordPlaceHolder: string;
+  user: UserLdap | undefined;
+  processLoadRunning: boolean = false;
+  processValidateRunning: boolean = false;
+  errorMessage = '';
+
+  userForm = this.fb.group({
+    login: [''],
+    nom: [''],
+    prenom: [''],
+    passwordGroup: this.fb.group({
+      password: [''],
+      confirmPassword: [''],
+    }, {validators: passwordMatchingValidator}),
+    mail: {value: '', disabled: true},
+  });
+
+  confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
   protected constructor(
     public addForm: boolean,
     private fb: FormBuilder,
     private router: Router,
   ) {
-    this.userForm = this.fb.group({
-      login: [''],
-      nom: [''],
-      prenom: [''],
-      passwordGroup: this.fb.group({
-        password: [''],
-        confirmPassword: ['']
-      }, { validators: passwordMatchingValidator }),
-      mail: [{ value: '', disabled: true }]
-    });
-
-    this.passwordPlaceHolder = 'Mot de passe' + (this.addForm ? '' : ' (vide si inchangé)');
+    this.passwordPlaceHolder = 'Mot de passe' + (this.addForm ? '' : '(vide si inchangé)');
     if (this.addForm) {
       this.passwordForm?.get('password')?.addValidators(Validators.required);
-      this.passwordForm?.get('confirmPassword')?.addValidators(Validators.required);
+      this.passwordForm?.get('confirmPassword')?.setValidators(Validators.required);
     }
   }
 
-  get passwordForm() {
-    return this.userForm.get('passwordGroup') as FormGroup;
+  protected onInit(): void {
+
   }
 
-  protected onInit(): void {
-    // Cette méthode est vide, assurez-vous d'y ajouter des fonctionnalités si nécessaire.
-  }
+  get passwordForm() {return this.userForm.get('passwordGroup') }
+
 
 
   goToLdap() {
-    this.router.navigate(['/users/list']).then((e) => {
+    this.router.navigate(['/users/list']).then((e) =>  {
       if (!e) {
-        console.error('Navigation has failed!');
+        console.error("Navigation has failed!");
       }
     });
   }
@@ -59,36 +57,31 @@ export abstract class LdapDetailsComponent {
     this.validateForm();
   }
 
-  isFormValid(): boolean {
-    return this.userForm.valid && (!this.addForm || this.formGetValue('passwordGroup.password') !== '');
-  }
-
   abstract validateForm(): void;
 
-  updateLogin() {
+
+  updateLogin(): void {
     const control = this.userForm.get('login');
     if (control === null) {
       console.error("L'objet 'login' du formulaire n'existe pas");
       return;
     }
-    control.setValue((this.formGetValue('prenom') + '.' + this.formGetValue('nom')).toLowerCase());
+    control.setValue((this.formGetValue('prenom') + '.' +
+      this.formGetValue('nom')).toLowerCase());
     this.updateMail();
   }
 
-  updateMail() {
+  updateMail(): void {
     const control = this.userForm.get('mail');
     if (control === null) {
       console.error("L'objet 'mail' du formulaire n'existe pas");
       return;
     }
-    control.setValue(this.formGetValue('login').toLowerCase() + '@epsi.lan');
+    control.setValue((this.formGetValue('login').toLowerCase() + '@epsi.lan'))
   }
 
-  getErrorMessage(): string {
-    if (this.passwordForm?.errors) {
-      return 'Les mots de passe ne correspondent pas';
-    }
-    return 'Entrez un mot de passe';
+  isFormValid(): boolean {
+    return this.userForm.valid && (!this.addForm || this.formGetValue('passwordGroup.password') !== '');
   }
 
   private formGetValue(name: string): string {
@@ -113,6 +106,7 @@ export abstract class LdapDetailsComponent {
     if (this.user === undefined) {
       return;
     }
+
     this.formSetValue('login', this.user.login);
     this.formSetValue('nom', this.user.nom);
     this.formSetValue('prenom', this.user.prenom);
@@ -127,15 +121,21 @@ export abstract class LdapDetailsComponent {
       prenom: this.formGetValue('prenom'),
       nomComplet: this.formGetValue('nom') + ' ' + this.formGetValue('prenom'),
       mail: this.formGetValue('mail'),
-      // Les valeurs suivantes devraient être reprises du formulaire
-      employeNumero: 1, // this.formGetValue('employeNumero'),
-      employeNiveau: 1, // this.formGetValue('employeNiveau'),
-      dateEmbauche: '2020-04-24', // this.formGetValue('dateEmbauche'),
-      publisherId: 1, // this.formGetValue('publisherId'),
-      active: true, // this.formGetValue('active'),
+      employeNumero: 1,
+      employeNiveau: 1,
+      dateEmbauche: '2020-02-02',
+      publisherId: 1,
+      active: true,
       motDePasse: '',
       role: 'ROLE_USER'
     };
+  }
+
+  getErrorMessage(): string {
+    if (this.passwordForm?.errors) {
+      return 'Les mots de passe ne correspondent pas';
+    }
+    return 'Entrez un mot de passe';
   }
 }
 

@@ -1,26 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { LdapDetailsComponent } from '../ldap-details/ldap-details.component';
-import { UsersService } from '../../service/users.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserLdap } from '../../models/user-ldap.model';
-import {error} from "@angular/compiler-cli/src/transformers/util";
+import {Component} from '@angular/core';
+import {LdapDetailsComponent} from "../ldap-details/ldap-details.component";
+import {FormBuilder} from "@angular/forms";
+import {UsersService} from "../../service/users.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-ldap-edit',
   templateUrl: '../ldap-details/ldap-details.component.html',
   styleUrls: ['../ldap-details/ldap-details.component.css']
 })
-export class LdapEditComponent extends LdapDetailsComponent implements OnInit {
+export class LdapEditComponent extends LdapDetailsComponent {
 
   constructor(
     private usersService: UsersService,
     private route: ActivatedRoute,
     fb: FormBuilder,
     router: Router,
-    private snackBar: MatSnackBar
-  ) {
+    private snackBar: MatSnackBar)  {
     super(false, fb, router);
   }
 
@@ -30,24 +27,25 @@ export class LdapEditComponent extends LdapDetailsComponent implements OnInit {
   }
 
   validateForm(): void {
-    console.log('LdapEditComponent - validateForm');
     this.processValidateRunning = true;
+    console.log('LdapEditComponent - validateForm');
     this.usersService.updateUser(this.getUserFromFormControl()).subscribe({
-      next: (value: UserLdap) => {
+      next: (value) => {
         this.processValidateRunning = false;
         this.errorMessage = '';
         this.snackBar.open('Utilisateur modifié !', 'X');
       },
       error: (err) => {
         this.processValidateRunning = false;
-        this.errorMessage = 'Une erreur est survenue dans la modification !';
+        this.errorMessage = "Une erreur est survenue dans la modification !";
         console.error('Modification utilisateur', err);
-        this.snackBar.open('Erreur dans la modification de l\'utilisateur', 'X');
+        this.snackBar.open('Utilisateur non modifié !', 'X');
       }
     });
   }
 
   private getUser(): void {
+    this.processLoadRunning = true;
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
     if (id === null) {
@@ -56,20 +54,17 @@ export class LdapEditComponent extends LdapDetailsComponent implements OnInit {
     }
 
     this.usersService.getUser(id).subscribe({
-      next: (user: UserLdap | undefined) => {
-        if (user) {
-          this.user = user;
-          this.copyUserToFormControl();
-          console.log('LdapDetails getUser =', user);
-        } else {
-          this.errorMessage = "L'utilisateur n'existe pas !";
-          this.snackBar.open('Utilisateur non trouvé !', 'X');
-        }
+      next: (user) => {
+        this.processLoadRunning = false;
+        this.user = user;
+        this.copyUserToFormControl();
+        console.log('LdapEdit getUser', user);
       },
       error: (err) => {
+        this.processLoadRunning = false;
         this.errorMessage = "L'utilisateur n'existe pas !";
-        console.error('Obtention utilisateur', err);
-        this.snackBar.open('Utilisateur non trouvé !', 'X');
+        console.error("Obtention utilisateur", err);
+        this.snackBar.open("Utilisateur non trouvé !", 'X');
       }
     });
   }

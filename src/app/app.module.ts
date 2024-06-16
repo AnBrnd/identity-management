@@ -4,34 +4,35 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NavbarComponent } from './ldap-management/navbar/navbar.component';
 import { AppMaterialModule } from './app-material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LdapManagementModule } from './ldap-management/ldap-management.module';
-import {HttpClientModule} from "@angular/common/http";
-import {InMemoryUsersService} from "./service/in-memory-users.service";
-import {HttpClientInMemoryWebApiModule} from "angular-in-memory-web-api";
+import { HttpClientModule } from "@angular/common/http";
+import { InMemoryUsersService } from "./service/in-memory-users.service";
+import { HttpClientInMemoryWebApiModule } from "angular-in-memory-web-api";
+import { LoginComponent } from './security/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PageNotFoundComponent,
-    NavbarComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     AppMaterialModule,
     LdapManagementModule,
-    AppRoutingModule,
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryUsersService, {dataEncapsulation: false}
-    )
+      InMemoryUsersService, { dataEncapsulation: false }
+    ),
   ],
   providers: [],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { UserLdap } from '../models/user-ldap.model';
-import { LDAP_USERS } from '../models/ldap-mock-data';
-import { Observable, of, throwError } from 'rxjs';
+import {UserLdap} from "../models/user-ldap";
+import {LDAP_USERS} from "../models/ldap-mock-data";
+import {Observable} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Injectable({
@@ -10,18 +10,17 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 export class UsersService {
 
   users: UserLdap[] = LDAP_USERS;
-
-  constructor(private http: HttpClient) {}
-
   private usersUrl = 'api/users';
   private httpOptions = new HttpHeaders({'Content-Type': 'application/json'});
+
+  constructor(private http: HttpClient) {
+  }
 
   getUsers(): Observable<UserLdap[]> {
     return this.http.get<UserLdap[]>(this.usersUrl);
   }
 
   getUser(id: number): Observable<UserLdap> {
-    const url = `${this.usersUrl}/${id}`;
     return this.http.get<UserLdap>(this.usersUrl + '/' + id);
   }
 
@@ -32,17 +31,12 @@ export class UsersService {
   }
 
   updateUser(user: UserLdap): Observable<UserLdap> {
-    return this.http.put<UserLdap>(this.usersUrl + '/' + user.id, user, {
-      headers: this.httpOptions
-    });
-    }
+    return this.http.put<UserLdap>(this.usersUrl + '/' + user.id, user, {headers: this.httpOptions});
+  }
 
   deleteUser(id: number): Observable<UserLdap> {
-    return this.http.delete<UserLdap>(this.usersUrl + '/' + id, {
-      headers: this.httpOptions
-    });
-    }
+    return this.http.delete<UserLdap>(this.usersUrl + '/' + id, {headers: this.httpOptions});
+  }
 }
-
 
 

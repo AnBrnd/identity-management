@@ -1,8 +1,9 @@
-import {Component, inject} from '@angular/core';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Observable} from 'rxjs';
-import {map, shareReplay} from 'rxjs/operators';
-import {AsyncPipe, NgIf} from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../../security/authentication.service';
 
 @Component({
   selector: 'app-navbar',
@@ -18,9 +19,12 @@ export class NavbarComponent {
       shareReplay()
     );
 
-  constructor(private breakPointObserver: BreakpointObserver) {
-  }
+  constructor(
+    private router: Router
+  ) {}
 
-  logout(): void {
+  logout() {
+    AuthenticationService.logout();
+    this.router.navigate(['login']);
   }
 }

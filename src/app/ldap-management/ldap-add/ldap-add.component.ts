@@ -4,7 +4,6 @@ import { UsersService } from '../../service/users.service';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserLdap } from '../../models/user-ldap.model';
 
 @Component({
   selector: 'app-ldap-add',
@@ -31,7 +30,7 @@ ngOnInit() {
 
     this.processValidateRunning = true;
     this.usersService.addUser(this.getUserFromFormControl()).subscribe({
-      next: (value: UserLdap) => {
+      next: (value) => {
         this.processValidateRunning = false;
         this.errorMessage = '';
         this.snackBar.open('Utilisateur ajouté !', 'X');

@@ -1,4 +1,4 @@
-import {UserLdap} from "./user-ldap.model";
+import {UserLdap} from "./user-ldap";
 
 export const LDAP_USERS: UserLdap[] = [
   {
