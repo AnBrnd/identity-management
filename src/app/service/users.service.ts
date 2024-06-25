@@ -10,7 +10,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 export class UsersService {
 
   users: UserLdap[] = LDAP_USERS;
-  private usersUrl = 'api/users';
+  private usersUrl = 'api/user';
   private httpOptions = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient) {

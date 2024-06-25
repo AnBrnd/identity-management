@@ -3,17 +3,17 @@ import {RouterModule, Routes} from '@angular/router';
 import {LdapEditComponent} from "./ldap-edit/ldap-edit.component";
 import {LdapListComponent} from "./ldap-list/ldap-list.component";
 import {LdapAddComponent} from "./ldap-add/ldap-add.component";
-import {authGuard} from "../security/auth.guard";
+import {AuthGuard} from "../security/AuthGuard";
 
 const adminRoutes: Routes = [
   {
-    path: 'users',
-    canActivate: [authGuard],
+    path: 'user',
+    canActivate: [AuthGuard],
     children: [
       {path: 'list', component: LdapListComponent},
       {path: 'add', component: LdapAddComponent},
       {path: ':id', component: LdapEditComponent},
-      {path: '', redirectTo: 'list', pathMatch: 'full'}
+      {path: '', redirectTo: 'user/list', pathMatch: 'full'}
     ]
   }
 ];

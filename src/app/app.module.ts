@@ -20,12 +20,12 @@ import { LoginComponent } from './security/login/login.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     AppMaterialModule,
     LdapManagementModule,
+    AppRoutingModule,
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(
       InMemoryUsersService, { dataEncapsulation: false }

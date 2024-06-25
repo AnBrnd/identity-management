@@ -13,8 +13,8 @@ export class InMemoryUsersService implements InMemoryDbService {
 
   createDb() {
     console.log('InMemoryUsersService.createDb');
-    const users: UserLdap[] = LDAP_USERS;
-    return {users};
+    const user: UserLdap[] = LDAP_USERS;
+    return {user};
   }
 
   genId(users: UserLdap[]): number {

@@ -46,7 +46,7 @@ export abstract class LdapDetailsComponent {
 
 
   goToLdap() {
-    this.router.navigate(['/users/list']).then((e) =>  {
+    this.router.navigate(['/user/list']).then((e) =>  {
       if (!e) {
         console.error("Navigation has failed!");
       }

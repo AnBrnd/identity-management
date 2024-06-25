@@ -5,7 +5,7 @@ import {LoginComponent} from "./security/login/login.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
-  {path: '', redirectTo: '/users/list', pathMatch: 'full'},
+  {path: '', redirectTo: 'user/list', pathMatch: 'full'},
   {path: '**', component: PageNotFoundComponent}
 ];
 
